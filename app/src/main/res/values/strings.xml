@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">知乎日报</string>
+    <string name="start">知乎日报</string>
+    <string name="explain">每天三次，每次七分钟</string>
+    <string name="login">请登录</string>
+    <string name="collect">我的收藏</string>
+    <string name="down">离线下载</string>
+    <string name="home">首页</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="today">今日热文</string>
+</resources>

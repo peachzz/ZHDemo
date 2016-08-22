@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:apps="http://schemas.android.com/tools"
+    android:id="@+id/linear"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:background="@drawable/start_layout"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/anim_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/iv_start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10dp"
+            android:textColor="@android:color/white"
+            apps:text="aaaa" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/anim"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="40dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/iv_bot"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignBottom="@+id/tv_explain"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/res_box" />
+
+
+        <TextView
+            android:id="@+id/tv_bot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_bot"
+            android:layout_toRightOf="@+id/iv_bot"
+            android:paddingBottom="10dp"
+            android:text="@string/start"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_bot"
+            android:layout_alignStart="@+id/tv_bot"
+            android:layout_centerVertical="true"
+            android:paddingTop="10dp"
+            android:text="@string/explain"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</LinearLayout>
