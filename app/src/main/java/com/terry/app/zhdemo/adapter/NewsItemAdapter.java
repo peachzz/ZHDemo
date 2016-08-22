@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.terry.app.zhdemo.R;
 import com.terry.app.zhdemo.bean.Latest;
+import com.terry.app.zhdemo.bean.StoriesBean;
 import com.terry.app.zhdemo.util.Contant;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 public class NewsItemAdapter extends BaseAdapter {
 
-    private List<Latest.StoriesBean> dataList;
+    private List<StoriesBean> dataList;
     private Context mContext;
 
     public NewsItemAdapter(Context mContext) {
@@ -32,8 +33,14 @@ public class NewsItemAdapter extends BaseAdapter {
         dataList = new ArrayList<>();
     }
 
-    public void addAll(List<Latest.StoriesBean> list) {
+    public void addAll(List<StoriesBean> list) {
+        list.removeAll(dataList);
         dataList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void addBefore(List<StoriesBean> storiesBeanList){
+        dataList.addAll(storiesBeanList);
         notifyDataSetChanged();
     }
 
@@ -65,7 +72,7 @@ public class NewsItemAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        Latest.StoriesBean storiesBean = dataList.get(position);
+        StoriesBean storiesBean = dataList.get(position);
         if (storiesBean.getType() == Contant.TOPIC) {
             ((FrameLayout) viewHolder.tvDate.getParent()).setBackgroundColor(Color.TRANSPARENT);
             viewHolder.tvTitle.setVisibility(View.GONE);

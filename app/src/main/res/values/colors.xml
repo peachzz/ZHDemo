@@ -9,4 +9,5 @@
     <color name="light_news_topic">#ff666666</color>
     <color name="dark_selector_drawable">#FF333333</color>
     <color name="gray">#BEBEBE</color>
+    <color name="transparent">#1effffff</color>
 </resources>

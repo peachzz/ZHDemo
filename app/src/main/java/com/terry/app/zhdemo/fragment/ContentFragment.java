@@ -15,6 +15,7 @@ import com.terry.app.zhdemo.MainActivity;
 import com.terry.app.zhdemo.R;
 import com.terry.app.zhdemo.adapter.NewsItemAdapter;
 import com.terry.app.zhdemo.bean.Latest;
+import com.terry.app.zhdemo.bean.StoriesBean;
 import com.terry.app.zhdemo.util.BannerView;
 import com.terry.app.zhdemo.util.Contant;
 
@@ -63,15 +64,12 @@ public class ContentFragment extends Fragment {
     }
 
     private void initEvent() {
-
-
         lvNews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             }
         });
-
     }
 
     private void parseLatestJson(String responseString) {
@@ -92,8 +90,8 @@ public class ContentFragment extends Fragment {
             public void run() {
                 bannerView.addImageTitleBeanList(titleBeanList);
                 bannerView.start();
-                List<Latest.StoriesBean> storiesEntities = latest.getStories();
-                Latest.StoriesBean topic = new Latest.StoriesBean();
+                List<StoriesBean> storiesEntities = latest.getStories();
+                StoriesBean topic = new StoriesBean();
                 topic.setType(Contant.TOPIC);
                 topic.setTitle("今日热闻");
                 storiesEntities.add(0, topic);

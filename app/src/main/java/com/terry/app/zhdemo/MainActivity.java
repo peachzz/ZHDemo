@@ -1,5 +1,7 @@
 package com.terry.app.zhdemo;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.terry.app.zhdemo.adapter.MenuListAdapter;
+import com.terry.app.zhdemo.fragment.TopNewsFragment;
 import com.terry.app.zhdemo.fragment.ContentFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String[] MENUS = {"日常心理学", "用户推荐日报", "电影日报", "不许无聊", "设计日报", "大公司日报", "财经日报", "互联网安全", "开始游戏", "音乐日报", "动漫日报", "体育日报"};
     private LinearLayout mLoginLay;
     private ScrollView mLeftMenu;
+    private TopNewsFragment topNewsFragment;
 
 
     @Override
@@ -45,10 +49,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         initEvents();
 
-        if (mContainer == null) {
-            mContainer = new ContentFragment();
+//        if (mContainer == null) {
+//            mContainer = new ContentFragment();
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            fragmentManager.beginTransaction().add(R.id.container, mContainer).commitAllowingStateLoss();
+//        }
+        if (topNewsFragment == null) {
+            topNewsFragment = new TopNewsFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().add(R.id.container, mContainer).commitAllowingStateLoss();
+            fragmentManager.beginTransaction().add(R.id.container, topNewsFragment).commitAllowingStateLoss();
         }
     }
 
@@ -126,7 +135,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         mDrawerLayout.closeDrawers();
     }
+
     public void setToolbarTitle(String text) {
         mToolbar.setTitle(text);
+    }
+
+    public void setToolbarColor(float a) {
+        mToolbar.setAlpha(a);
     }
 }
