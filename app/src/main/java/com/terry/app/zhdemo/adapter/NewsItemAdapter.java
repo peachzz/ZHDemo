@@ -78,7 +78,7 @@ public class NewsItemAdapter extends BaseAdapter {
             viewHolder.tvTitle.setVisibility(View.GONE);
             viewHolder.ivTop.setVisibility(View.GONE);
             viewHolder.tvDate.setVisibility(View.VISIBLE);
-//            viewHolder.tvDate.setText(storiesBean.getTitle());
+            viewHolder.tvDate.setText(storiesBean.getTitle());
         } else {
             viewHolder.tvDate.setVisibility(View.GONE);
             viewHolder.tvTitle.setVisibility(View.VISIBLE);

@@ -2,13 +2,16 @@ package com.terry.app.zhdemo.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 import com.terry.app.zhdemo.MainActivity;
 import com.terry.app.zhdemo.R;
 import com.terry.app.zhdemo.adapter.NewsItemAdapter;
@@ -31,21 +34,25 @@ import okhttp3.Response;
 /**
  * Created by Taozi on 2016/8/22.
  */
-public class TopNewsFragment extends BaseFragment {
+public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
     private ListView lvNews;
     private BannerView bannerView;
-    private Latest latest;
     private Before before;
+    private Latest latest;
+    //日期时间,20160823
     private String date;
     private NewsItemAdapter mAdapter;
+    //轮播数据集合加载
     private List<BannerView.ImageTitleBean> titleBeanList;
     private Handler handler = new Handler();
-
+    private boolean isLoading = false;
+//    private SwipeRefreshLayout mSwipe;
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.today_news_list, container, false);
+//        mSwipe = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
         lvNews = (ListView) view.findViewById(R.id.lv_news);
         View header = inflater.inflate(R.layout.header, lvNews, false);
         bannerView = (BannerView) header.findViewById(R.id.header);
@@ -58,11 +65,15 @@ public class TopNewsFragment extends BaseFragment {
         lvNews.addHeaderView(header);
         mAdapter = new NewsItemAdapter(getActivity());
         lvNews.setAdapter(mAdapter);
+        lvNews.setOnScrollListener(this);
+//        mSwipe.setColorSchemeResources(R.color.bule,R.color.yellow,R.color.red,R.color.green);
+//        mSwipe.setOnRefreshListener(this);
         initEvent();
         return view;
     }
 
     private void loadMore(String s) {
+        isLoading = true;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(s).build();
         Call call = client.newCall(request);
@@ -101,6 +112,7 @@ public class TopNewsFragment extends BaseFragment {
     }
 
     public void getLatest(String url) {
+        isLoading = true;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
         try {
@@ -115,7 +127,8 @@ public class TopNewsFragment extends BaseFragment {
     private void parseLatestJson(String responseString) {
         Gson gson = new Gson();
         latest = gson.fromJson(responseString, Latest.class);
-//        date = latest.getDate();
+        Logger.d(latest);
+        date = latest.getDate();
         List<Latest.TopStoriesBean> topStoriesBeanList = latest.getTop_stories();
         titleBeanList = new ArrayList<>();
         for (int i = 0; i < topStoriesBeanList.size(); i++) {
@@ -136,6 +149,7 @@ public class TopNewsFragment extends BaseFragment {
                 bannerView.addImageTitleBeanList(titleBeanList);
                 bannerView.start();
                 ((MainActivity) mActivity).setToolbarTitle("今日热文");
+                isLoading = false;
 //                ((MainActivity) mActivity).setToolbarColor();
             }
         });
@@ -144,6 +158,10 @@ public class TopNewsFragment extends BaseFragment {
     private void parseBeforeJson(String responseString) {
         Gson gson = new Gson();
         before = gson.fromJson(responseString, Before.class);
+        if (before == null) {
+            isLoading = false;
+            return;
+        }
         date = before.getDate();
         handler.post(new Runnable() {
             @Override
@@ -155,6 +173,7 @@ public class TopNewsFragment extends BaseFragment {
                 storiesEntities.add(0, topic);
                 mAdapter.addBefore(storiesEntities);
                 ((MainActivity) mActivity).setToolbarTitle(convertDate(date));
+                isLoading = false;
             }
         });
     }
@@ -167,5 +186,20 @@ public class TopNewsFragment extends BaseFragment {
         result += date.substring(6, 8);
         result += "日";
         return result;
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (lvNews != null && lvNews.getChildCount() > 0) {
+
+            if (firstVisibleItem + visibleItemCount == totalItemCount && !isLoading) {
+                loadMore(Contant.URL_BEFORE + date);
+            }
+        }
     }
 }

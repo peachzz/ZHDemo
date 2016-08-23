@@ -10,4 +10,8 @@
     <color name="dark_selector_drawable">#FF333333</color>
     <color name="gray">#BEBEBE</color>
     <color name="transparent">#1effffff</color>
+    <color name="red">@android:color/holo_red_dark</color>
+    <color name="bule">@android:color/holo_blue_bright</color>
+    <color name="yellow">#fcc601</color>
+    <color name="green">#1e1fff01</color>
 </resources>
