@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import com.terry.app.zhdemo.MyApplication;
 import com.terry.app.zhdemo.R;
+import com.terry.app.zhdemo.bean.ThemesID;
+
+import java.util.List;
 
 
 /**
@@ -18,21 +21,22 @@ import com.terry.app.zhdemo.R;
  */
 public class MenuListAdapter extends BaseAdapter {
     private Context mContxt;
-    private String[] list = new String[12];
+//    private String[] list = new String[12];
+    private List<ThemesID> dataList;
 
-    public MenuListAdapter(Context contxt, String[] mList) {
+    public MenuListAdapter(Context contxt, List<ThemesID> dataList) {
         this.mContxt = contxt;
-        this.list = mList;
+        this.dataList =dataList;
     }
 
     @Override
     public int getCount() {
-        return list.length;
+        return dataList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list[position];
+        return dataList.get(position);
     }
 
     @Override
@@ -52,11 +56,12 @@ public class MenuListAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.mTv_Item.setText(list[position]);
+        viewHolder.mTv_Item.setText(dataList.get(position).getName());
         viewHolder.mIbMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewHolder.mIbMenu.setBackgroundResource(R.drawable.background);
+//                viewHolder.mIbMenu.setBackgroundResource(R.drawable.background);
+//                viewHolder.mIbMenu.setSelected(true);
                 Toast.makeText(MyApplication.getContext(), "关注成功", Toast.LENGTH_SHORT).show();
             }
         });

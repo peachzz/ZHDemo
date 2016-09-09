@@ -1,4 +1,4 @@
-package com.terry.app.zhdemo;
+package com.terry.app.zhdemo.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.terry.app.zhdemo.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

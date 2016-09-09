@@ -128,7 +128,6 @@
 
     <com.terry.app.zhdemo.view.CustomerListView
         android:id="@+id/lv_menu"
-        android:background="@drawable/bt_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"

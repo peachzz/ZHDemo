@@ -39,7 +39,7 @@ public class NewsItemAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addBefore(List<StoriesBean> storiesBeanList){
+    public void addBefore(List<StoriesBean> storiesBeanList) {
         dataList.addAll(storiesBeanList);
         notifyDataSetChanged();
     }

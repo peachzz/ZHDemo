@@ -2,19 +2,21 @@ package com.terry.app.zhdemo.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
-import com.terry.app.zhdemo.MainActivity;
+import com.terry.app.zhdemo.activity.MainActivity;
 import com.terry.app.zhdemo.R;
+import com.terry.app.zhdemo.activity.NewsDetailActivity;
 import com.terry.app.zhdemo.adapter.NewsItemAdapter;
+import com.terry.app.zhdemo.adapter.NewsItemTypeAdapter;
 import com.terry.app.zhdemo.bean.Before;
 import com.terry.app.zhdemo.bean.Latest;
 import com.terry.app.zhdemo.bean.StoriesBean;
@@ -42,11 +44,15 @@ public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrol
     private Latest latest;
     //日期时间,20160823
     private String date;
-    private NewsItemAdapter mAdapter;
+    //    private NewsItemAdapter mAdapter;
+    private NewsItemTypeAdapter mAdapter;
     //轮播数据集合加载
     private List<BannerView.ImageTitleBean> titleBeanList;
+    private List<Latest.TopStoriesBean> topStoriesBeanList;
+    private List<StoriesBean> stories;
     private Handler handler = new Handler();
     private boolean isLoading = false;
+//    private int index = 1;
 //    private SwipeRefreshLayout mSwipe;
 
     @Override
@@ -59,11 +65,12 @@ public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrol
         bannerView.setOnItemClickListener(new BannerView.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                NewsDetailActivity.startActivity(getContext(), topStoriesBeanList.get(position).getId());
+//                Toast.makeText(getContext(),""+position,Toast.LENGTH_SHORT).show();
             }
         });
         lvNews.addHeaderView(header);
-        mAdapter = new NewsItemAdapter(getActivity());
+        mAdapter = new NewsItemTypeAdapter(getActivity());
         lvNews.setAdapter(mAdapter);
         lvNews.setOnScrollListener(this);
 //        mSwipe.setColorSchemeResources(R.color.bule,R.color.yellow,R.color.red,R.color.green);
@@ -106,7 +113,9 @@ public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrol
         lvNews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                StoriesBean storiesBean = (StoriesBean) mAdapter.getItem(position - 1);
+                NewsDetailActivity.startActivity(getContext(), storiesBean.getId());
+//                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -127,9 +136,9 @@ public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrol
     private void parseLatestJson(String responseString) {
         Gson gson = new Gson();
         latest = gson.fromJson(responseString, Latest.class);
-        Logger.d(latest);
+        Logger.d("LATEST", latest.getTop_stories(), latest.getStories());
         date = latest.getDate();
-        List<Latest.TopStoriesBean> topStoriesBeanList = latest.getTop_stories();
+        topStoriesBeanList = latest.getTop_stories();
         titleBeanList = new ArrayList<>();
         for (int i = 0; i < topStoriesBeanList.size(); i++) {
             BannerView.ImageTitleBean imageTitleBean = new BannerView.ImageTitleBean();
@@ -140,7 +149,7 @@ public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrol
         handler.post(new Runnable() {
             @Override
             public void run() {
-                List<StoriesBean> stories = latest.getStories();
+                stories = latest.getStories();
                 StoriesBean storiesBean = new StoriesBean();
                 storiesBean.setTitle("今日热闻");
                 storiesBean.setType(Contant.TOPIC);
@@ -148,9 +157,9 @@ public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrol
                 mAdapter.addAll(stories);
                 bannerView.addImageTitleBeanList(titleBeanList);
                 bannerView.start();
-                ((MainActivity) mActivity).setToolbarTitle("今日热文");
+                ((MainActivity) mActivity).setToolbarTitle("今日热闻");
                 isLoading = false;
-//                ((MainActivity) mActivity).setToolbarColor();
+//                ((MainActivity) mActivity).setToolbarColor(0.01f);
             }
         });
     }
@@ -171,7 +180,7 @@ public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrol
                 topic.setType(Contant.TOPIC);
                 topic.setTitle(convertDate(date));
                 storiesEntities.add(0, topic);
-                mAdapter.addBefore(storiesEntities);
+                mAdapter.addAll(storiesEntities);
                 ((MainActivity) mActivity).setToolbarTitle(convertDate(date));
                 isLoading = false;
             }
@@ -196,7 +205,7 @@ public class TopNewsFragment extends BaseFragment implements AbsListView.OnScrol
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (lvNews != null && lvNews.getChildCount() > 0) {
-
+            //下拉加载昨日新闻
             if (firstVisibleItem + visibleItemCount == totalItemCount && !isLoading) {
                 loadMore(Contant.URL_BEFORE + date);
             }

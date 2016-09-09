@@ -1,11 +1,12 @@
 package com.terry.app.zhdemo.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Taozi on 2016/8/22.
  */
-public class StoriesBean {
+public class StoriesBean  {
     private int type;
     private int id;
     private String ga_prefix;
